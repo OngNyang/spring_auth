@@ -1,9 +1,9 @@
-package org.example.redis_filter_interceptor.model;
+package org.example.redis_filter_interceptor.dto;
 
 import lombok.Data;
 
 @Data
-public class LoginRequest {
+public class LoginRequestDto {
     private String  username;
     private String  password;
 }
