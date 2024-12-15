@@ -8,6 +8,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -17,9 +19,11 @@ import java.util.Collections;
 @Component
 public class AuthFilter extends OncePerRequestFilter {
     private final RedisTemplate<String, Object> redisTemplate;
+    private final UserDetailsService userDetailsService;
 
-    public AuthFilter(RedisTemplate<String, Object> redisTemplate) {
+    public AuthFilter(RedisTemplate<String, Object> redisTemplate, UserDetailsService userDetailsService) {
         this.redisTemplate = redisTemplate;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -36,6 +40,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
                 // Redis에서 username 가져오기
                 String username = (String) redisTemplate.opsForValue().get(token);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 System.out.println("username: " + username);
 
                 // Spring Security 인증 객체 생성
@@ -43,7 +48,8 @@ public class AuthFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(
                                 username,
                                 null, // 비밀번호는 필요하지 않음
-                                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")) // 기본 역할 추가
+                                userDetails.getAuthorities()
+//                                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")) // 기본 역할 추가
                         );
 
                 // 인증 객체를 SecurityContext에 설정

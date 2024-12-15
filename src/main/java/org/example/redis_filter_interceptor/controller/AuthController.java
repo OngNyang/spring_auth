@@ -3,7 +3,7 @@ package org.example.redis_filter_interceptor.controller;
 import org.example.redis_filter_interceptor.dto.UserRegistrationRequestDto;
 import org.example.redis_filter_interceptor.exception.InvalidCredentialsException;
 import org.example.redis_filter_interceptor.dto.LoginRequestDto;
-import org.example.redis_filter_interceptor.model.LoginResponse;
+import org.example.redis_filter_interceptor.dto.LoginResponseDto;
 import org.example.redis_filter_interceptor.model.User;
 import org.example.redis_filter_interceptor.service.UserService;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -71,7 +71,7 @@ public class AuthController {
 //            } else {
 //                throw new InvalidCredentialsException("Invalid username or password.");
 //            }
-            response = ResponseEntity.ok(new LoginResponse(token));
+            response = ResponseEntity.ok(new LoginResponseDto(token));
         } catch(InvalidCredentialsException e) {
             response = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         } catch(Exception e) {
