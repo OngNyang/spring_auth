@@ -85,12 +85,13 @@ public class UserService {
         ObjectMapper        objectMapper = new ObjectMapper();
         String              jsonValue = null;
         String              token = null;
+        String              redisPath = "spring:session:sessions:";
 
         userData.put("username", user.getUsername());
         userData.put("roles", user.getRoles().stream().map(Role::getName).toList());
         jsonValue = objectMapper.writeValueAsString(userData);
         token = UUID.randomUUID().toString();
-        redisTemplate.opsForValue().set(token,jsonValue,1, TimeUnit.HOURS);
+        redisTemplate.opsForValue().set(redisPath + token,jsonValue,1, TimeUnit.HOURS);
 
         return (token);
     }
