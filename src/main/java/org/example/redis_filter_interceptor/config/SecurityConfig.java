@@ -45,14 +45,4 @@ public class SecurityConfig {
 
         return (http.build());
     }
-
-//    @Override
-//    protected void  configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable()
-//                .authorizeRequests()
-//                .antMatchers("/auth/login").permitAll()
-//                .anyRequest().authenticated()
-//                        .and()
-//                        .addFilterBeofore(authFilter, UsernamePasswordAuthenticationFilter.class);
-//    }
 }
